@@ -6,10 +6,13 @@ class Table extends Component {
         persons: [],
     };
     componentDidMount(){
-        axios.get('https://jsonplaceholder.typicode.com/users')
+        axios.get('https://localhost:5001/todos/')
             .then(res=> {
-                console.log(res);
+                console.log('hello');
                 this.setState({persons: res.data});
+            })
+            .catch(function(err){
+                console.log('failed');
             })
     }
 
@@ -27,8 +30,8 @@ class Table extends Component {
                             <>
                             {this.state.persons.map(person =>                                
                             <tr>                                                        
-                                <td className="table-light">{person.name}</td>
-                                <td className="table-light"><button className="btn btn-success">{person.username}</button></td>                                                                                                        
+                                <td className="table-light">{person.info}</td>
+                                <td className="table-light"><button className="btn btn-success">{person.status}</button></td>                                                                                                        
                             </tr>
                             )}
                             </>
