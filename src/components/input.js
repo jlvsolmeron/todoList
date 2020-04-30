@@ -2,11 +2,13 @@ import React, { Component } from "react";
 import {faPlus} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
-class Input extends Component {    
-    
+class Input extends Component {        
+    value = 'hello';
+
     state = {
-        input: [{info: ""}],
+        input: [{info: ""}],        
     }
+
 
     InputInfo = (props) => {
         return (

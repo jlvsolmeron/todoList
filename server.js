@@ -34,6 +34,47 @@ routes.route('/').get(function(req, res){
   });
 });
 
+routes.route('/add').post(function(req, res){
+  let todo = new Todo(req.body);
+  todo.save()
+    .then(todo => {
+      res.status(200).json({'todo': 'added'});
+    })
+    .catch(err => {
+      res.status(400).send('failed adding task')
+    });
+})
+
+routes.route('/delete').delete(function(req, res){
+  Todo.deleteMany({}, function(err){
+    if(err){
+      res.status(500).send({error: 'Could not delete'});
+    }
+    else{
+      res.status(200).send({message: "ALL FILES DELETED"});
+    }
+  })
+})
+
+routes.route('/update').post(function(req, res){
+  Todo.findById(req.body._id, function(err, todo){
+    if(!todo){
+      res.status(400).send('id not found');
+    }
+    else{
+      todo.status = req.body.status;
+
+      todo.save()
+        .then(todo => {
+          res.json('update successful')
+        })
+        .catch(err => {
+          res.status(400).send('update unsuccessful')
+        });
+    }
+  })
+})
+
 
 app.use('/todos', routes);
 

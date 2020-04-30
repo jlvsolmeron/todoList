@@ -4,6 +4,7 @@ import Button from "react-bootstrap/Button";
 import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
 import Input from './input';
+import axios from 'axios';
 
 function Buttons() {
     const [showList, setShowAddList] = useState(false);
@@ -21,11 +22,40 @@ function Buttons() {
     const showDeleteList = () => setDelete(true);             
     
     const color = {
-        color: 'red'
+        color: 'red',        
     }
 
     const state = {
-        count: 1
+        task: ''
+    }
+
+
+    const handleChange = (e) => {
+        state.task = e.target.value
+        
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();         
+
+        const save = {
+            info: state.task
+        }
+        
+        axios.post('http://localhost:5001/todos/add', save)
+            .then(res => console.log(res.data));            
+        
+        state.task = ''
+
+        setShowAddTask(false);
+        
+    }  
+    
+    const handleDelete = () => {        
+        axios.delete('http://localhost:5001/todos/delete', {data: {}})
+            .then(res => console.log(res.data));
+
+            setDelete(false);
     }
 
     return (
@@ -54,15 +84,15 @@ function Buttons() {
                     <Modal.Title>Add Task</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <InputGroup className="mb-3">
+                        <InputGroup className="mb-3" onChange={handleChange}>
                             <FormControl></FormControl>
                         </InputGroup>
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant="secondary" onClick={closeAddTask}>Close</Button>
-                        <Button variant="primary" onClick={closeAddTask}>Add Task</Button>
+                        <Button variant="primary" onClick={handleSubmit}>Add Task</Button>
                     </Modal.Footer>
-            </Modal>
+            </Modal> 
 
             <Modal show={showDelete} onHide={closeDeleteList}>
                 <Modal.Header closeButton>
@@ -71,7 +101,7 @@ function Buttons() {
                     <Modal.Body><h3 style={color}>Are you sure you want to delete current list?</h3></Modal.Body>
                     <Modal.Footer>
                         <Button variant="secondary" onClick={closeDeleteList}>Close</Button>
-                        <Button variant="danger" onClick={closeDeleteList}>Delete</Button>
+                        <Button variant="primary" onClick={handleDelete}>Delete</Button>
                     </Modal.Footer>
             </Modal>
         </>
